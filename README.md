@@ -1,15 +1,16 @@
- SentriX
+# SentriX
 
- Sistema de Monitorização e Segurança de Veículos
+## Sistema de Monitorização e Segurança de Veículos
 
-O SentriX é um sistema de monitorização e segurança de veículos desenvolvido no âmbito da Prova de Aptidão Profissional (PAP).
+O **SentriX** é um sistema de monitorização e segurança de veículos desenvolvido no âmbito da Prova de Aptidão Profissional (PAP).
 
 O projeto tem como objetivo permitir ao proprietário acompanhar e gerir os seus veículos através de uma aplicação, enquanto um dispositivo instalado no veículo poderá recolher e transmitir informações relacionadas com a sua localização.
 
 Este repositório contém o código-fonte do backend do projeto SentriX.
 
+---
 
-Objetivo do Backend
+## Objetivo do Backend
 
 O backend é responsável por funcionar como a camada intermédia entre a aplicação, a base de dados e, futuramente, o dispositivo instalado no veículo.
 
@@ -26,23 +27,25 @@ Entre as suas responsabilidades encontram-se:
 - Validação da propriedade dos veículos;
 - Comunicação com a base de dados PostgreSQL.
 
+---
 
-Tecnologias utilizadas
+## Tecnologias utilizadas
 
-| Tecnologia    |        Utilização                   |
+| Tecnologia | Utilização |
 |---|---|
-| Node.js             Ambiente de execução 
-| TypeScript          Linguagem de programação 
-| Express             Desenvolvimento da API REST
-| PostgreSQL          Sistema de gestão da base de dados 
-| Prisma              ORM e acesso à base de dados 
-| JWT                 Autenticação e autorização 
-| bcrypt              Proteção das palavras-passe 
-| Git                 Controlo de versões 
-| GitHub              Repositório e disponibilização do código-fonte |
+| Node.js | Ambiente de execução |
+| TypeScript | Linguagem de programação |
+| Express | Desenvolvimento da API REST |
+| PostgreSQL | Sistema de gestão da base de dados |
+| Prisma | ORM e acesso à base de dados |
+| JWT | Autenticação e autorização |
+| bcrypt | Proteção das palavras-passe |
+| Git | Controlo de versões |
+| GitHub | Repositório e disponibilização do código-fonte |
 
+---
 
-Arquitetura
+## Arquitetura
 
 O backend segue uma organização por camadas:
 
@@ -66,29 +69,29 @@ O backend segue uma organização por camadas:
        ▼
     PostgreSQL
 
- Routes
+### Routes
 
 Responsáveis por definir os endpoints disponíveis na API.
 
- Controllers
+### Controllers
 
 Recebem os pedidos HTTP e devolvem as respostas ao cliente.
 
- Services
+### Services
 
 Contêm a lógica principal das funcionalidades.
 
- Repositories
+### Repositories
 
 Responsáveis pelo acesso aos dados através do Prisma.
 
- Prisma
+### Prisma
 
 Funciona como camada de comunicação entre a aplicação e a base de dados PostgreSQL.
 
+---
 
-
- Estrutura do projeto
+## Estrutura do projeto
 
     backend/
     │
@@ -134,11 +137,11 @@ Funciona como camada de comunicação entre a aplicação e a base de dados Post
     ├── tsconfig.json
     └── README.md
 
+---
 
+## Funcionalidades implementadas
 
- Funcionalidades implementadas
-
- Autenticação
+### Autenticação
 
 O sistema possui mecanismos para:
 
@@ -149,7 +152,7 @@ O sistema possui mecanismos para:
 - Consulta dos dados do utilizador autenticado;
 - Proteção de endpoints através de middleware de autenticação.
 
- Gestão de veículos
+### Gestão de veículos
 
 Cada veículo está associado a um utilizador.
 
@@ -163,11 +166,11 @@ As operações atualmente implementadas incluem:
 
 O sistema verifica também se o veículo pertence ao utilizador autenticado antes de permitir operações sobre o mesmo.
 
+---
 
+## Base de dados
 
- Base de dados
-
-O projeto utiliza PostgreSQL como sistema de gestão de base de dados.
+O projeto utiliza **PostgreSQL** como sistema de gestão de base de dados.
 
 O Prisma é utilizado como ORM para definir os modelos e realizar as operações sobre a base de dados.
 
@@ -177,8 +180,7 @@ Atualmente existem os seguintes modelos principais:
     Vehicle
     Device
 
-
- Relações
+### Relações
 
 Um utilizador pode possuir vários veículos:
 
@@ -194,9 +196,9 @@ A estrutura da base de dados encontra-se definida em:
 
 As alterações estruturais da base de dados são controladas através das migrations do Prisma.
 
+---
 
-
- Configuração do ambiente
+## Configuração do ambiente
 
 Por motivos de segurança, as variáveis de ambiente não são incluídas diretamente no repositório.
 
@@ -215,23 +217,23 @@ Para configurar o projeto localmente, deve ser criado um ficheiro `.env` baseado
 
     .env.example
 
+---
 
+## Instalação
 
- Instalação
-
- 1. Clonar o repositório
+### 1. Clonar o repositório
 
     git clone https://github.com/monizalexandre658-crypto/sentrix-pap.git
 
- 2. Entrar na pasta do projeto
+### 2. Entrar na pasta do projeto
 
     cd sentrix-pap
 
- 3. Instalar as dependências
+### 3. Instalar as dependências
 
     npm install
 
- 4. Criar o ficheiro `.env`
+### 4. Criar o ficheiro `.env`
 
 Criar um ficheiro `.env` na raiz do projeto.
 
@@ -242,9 +244,9 @@ Adicionar as variáveis necessárias:
 
 Os valores reais não devem ser publicados no GitHub.
 
+---
 
-
- Base de dados
+## Base de dados
 
 Depois de configurar o PostgreSQL e a variável `DATABASE_URL`, as migrations do projeto podem ser aplicadas através do Prisma:
 
@@ -254,9 +256,9 @@ Caso seja necessário gerar novamente o cliente Prisma:
 
     npx prisma generate
 
+---
 
-
- Executar o projeto
+## Executar o projeto
 
 Para iniciar o servidor:
 
@@ -266,9 +268,9 @@ Quando o servidor estiver em execução, a API fica disponível localmente em:
 
     http://localhost:3000
 
+---
 
-
- Verificação do código
+## Verificação do código
 
 Antes de executar ou entregar uma versão do projeto, pode ser realizada a verificação do TypeScript através de:
 
@@ -276,7 +278,7 @@ Antes de executar ou entregar uma versão do projeto, pode ser realizada a verif
 
 Se não forem apresentados erros, a verificação de tipos foi concluída com sucesso.
 
-
+---
 
 ## Testes da API
 
@@ -296,9 +298,9 @@ Foram realizados testes relacionados com:
 - Validação de veículos inexistentes;
 - Validação da associação entre utilizador e veículo.
 
+---
 
-
- Segurança
+## Segurança
 
 O projeto não disponibiliza publicamente informações sensíveis.
 
@@ -308,9 +310,9 @@ As palavras-passe dos utilizadores não são armazenadas diretamente como texto 
 
 A autenticação da API utiliza tokens JWT.
 
+---
 
-
- Estado atual
+## Estado atual
 
 O backend encontra-se em desenvolvimento no âmbito da PAP.
 
@@ -318,9 +320,9 @@ As funcionalidades de autenticação e gestão de veículos encontram-se impleme
 
 Funcionalidades relacionadas com o dispositivo físico, localização GPS em tempo real, comunicação com o ESP32 e restantes componentes do sistema SentriX serão integradas progressivamente.
 
+---
 
-
- Próximas etapas
+## Próximas etapas
 
 Entre as próximas fases de desenvolvimento encontram-se:
 
@@ -334,16 +336,16 @@ Entre as próximas fases de desenvolvimento encontram-se:
 - Funcionalidades de segurança e deteção de situações de furto;
 - Integração das restantes componentes do sistema SentriX.
 
+---
 
+## Projeto PAP
 
- Projeto PAP
+**Projeto:** SentriX
 
- Projeto: SentriX
+**Tipo:** Prova de Aptidão Profissional (PAP)
 
- Tipo: Prova de Aptidão Profissional (PAP)
+**Área:** Gestão e Programação de Equipamentos Informáticos
 
- Área: Técnico de Gestão de Equipamentos Informáticos
-
- Repositório GitHub:
+**Repositório GitHub:**
 
 https://github.com/monizalexandre658-crypto/sentrix-pap
