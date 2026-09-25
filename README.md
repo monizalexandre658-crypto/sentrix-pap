@@ -344,7 +344,7 @@ Entre as próximas fases de desenvolvimento encontram-se:
 
 **Tipo:** Prova de Aptidão Profissional (PAP)
 
-**Área:** Gestão e Programação de Equipamentos Informáticos
+**Área:** Técnico de Gestão de Equipamentos Informáticos
 
 **Repositório GitHub:**
 
