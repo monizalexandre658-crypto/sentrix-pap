@@ -1,0 +1,36 @@
+# Dependências
+node_modules/
+
+# Variáveis de ambiente e informações sensíveis
+.env
+.env.*
+!.env.example
+
+# Prisma Client gerado automaticamente
+/src/generated/prisma/
+
+# Build
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Cobertura de testes
+coverage/
+
+# Ficheiros temporários
+*.tmp
+*.temp
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Ferramentas auxiliares de desenvolvimento
+.agents/
+.claude/
+.windsurf/
