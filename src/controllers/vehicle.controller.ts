@@ -45,14 +45,15 @@ export class VehicleController {
         success: true,
         vehicle,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
 
       return res.status(500).json({
         success: false,
         message:
-          error.message ||
-          "Erro ao criar veículo.",
+          error instanceof Error
+            ? error.message
+            : "Erro ao criar veículo.",
       });
     }
   }
@@ -80,14 +81,15 @@ export class VehicleController {
         success: true,
         vehicles,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
 
       return res.status(500).json({
         success: false,
         message:
-          error.message ||
-          "Erro ao obter veículos.",
+          error instanceof Error
+            ? error.message
+            : "Erro ao obter veículos.",
       });
     }
   }
@@ -125,24 +127,22 @@ export class VehicleController {
         success: true,
         vehicle,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
 
-      if (
-        error.message ===
-        "Veículo não encontrado."
-      ) {
+      const message =
+        error instanceof Error ? error.message : undefined;
+
+      if (message === "Veículo não encontrado.") {
         return res.status(404).json({
           success: false,
-          message: error.message,
+          message,
         });
       }
 
       return res.status(500).json({
         success: false,
-        message:
-          error.message ||
-          "Erro ao obter veículo.",
+        message: message || "Erro ao obter veículo.",
       });
     }
   }
@@ -180,24 +180,22 @@ export class VehicleController {
         success: true,
         vehicle,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
 
-      if (
-        error.message ===
-        "Veículo não encontrado."
-      ) {
+      const message =
+        error instanceof Error ? error.message : undefined;
+
+      if (message === "Veículo não encontrado.") {
         return res.status(404).json({
           success: false,
-          message: error.message,
+          message,
         });
       }
 
       return res.status(500).json({
         success: false,
-        message:
-          error.message ||
-          "Erro ao obter estado da verificação.",
+        message: message || "Erro ao obter estado da verificação.",
       });
     }
   }
@@ -250,24 +248,22 @@ export class VehicleController {
         success: true,
         vehicle,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
 
-      if (
-        error.message ===
-        "Veículo não encontrado."
-      ) {
+      const message =
+        error instanceof Error ? error.message : undefined;
+
+      if (message === "Veículo não encontrado.") {
         return res.status(404).json({
           success: false,
-          message: error.message,
+          message,
         });
       }
 
       return res.status(500).json({
         success: false,
-        message:
-          error.message ||
-          "Erro ao atualizar veículo.",
+        message: message || "Erro ao atualizar veículo.",
       });
     }
   }
@@ -304,24 +300,22 @@ export class VehicleController {
         success: true,
         message: "Veículo eliminado com sucesso.",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
 
-      if (
-        error.message ===
-        "Veículo não encontrado."
-      ) {
+      const message =
+        error instanceof Error ? error.message : undefined;
+
+      if (message === "Veículo não encontrado.") {
         return res.status(404).json({
           success: false,
-          message: error.message,
+          message,
         });
       }
 
       return res.status(500).json({
         success: false,
-        message:
-          error.message ||
-          "Erro ao eliminar veículo.",
+        message: message || "Erro ao eliminar veículo.",
       });
     }
   }

@@ -1,6 +1,10 @@
-import { Router } from "express";
+import { Router, Request, Response, NextFunction } from "express";
+import multer from "multer";
 import { VehicleDocumentController } from "../controllers/vehicle-document.controller";
-import { vehicleDocumentUpload } from "../config/multer";
+import {
+  vehicleDocumentUpload,
+  validateUploadedPdf,
+} from "../config/multer";
 import { authMiddleware } from "../middlewares/auth.middleware";
 
 const router = Router();
@@ -8,12 +12,41 @@ const router = Router();
 const vehicleDocumentController =
   new VehicleDocumentController();
 
+function multerUpload(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  vehicleDocumentUpload.single("file")(req, res, (err) => {
+    if (err) {
+      if (
+        err instanceof multer.MulterError &&
+        err.code === "LIMIT_FILE_SIZE"
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "O ficheiro excede o tamanho máximo permitido de 10 MB.",
+        });
+      }
 
- 
+      return res.status(400).json({
+        success: false,
+        message:
+          err instanceof Error
+            ? err.message
+            : "Erro ao processar o ficheiro.",
+      });
+    }
+    next();
+  });
+}
+
 router.post(
   "/vehicles/:id/documents",
   authMiddleware,
-  vehicleDocumentUpload.single("file"),
+  multerUpload,
+  validateUploadedPdf,
   vehicleDocumentController.upload.bind(
     vehicleDocumentController,
   ),

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { UserService } from "../services/user.service";
+import { ValidationError } from "../errors/validation-error";
 
 export class AuthController {
   private userService: UserService;
@@ -26,13 +27,18 @@ export class AuthController {
         user: safeUser,
       });
     } catch (error) {
-      console.error("Erro no registo:", error);
+      if (error instanceof ValidationError) {
+        return res.status(400).json({
+          success: false,
+          message: error.message,
+        });
+      }
 
-      return res.status(400).json({
+      console.error("Erro inesperado no registo:", error instanceof Error ? error.message : error);
+
+      return res.status(500).json({
         success: false,
-        message: error instanceof Error
-          ? error.message
-          : "Erro ao registar utilizador.",
+        message: "Ocorreu um erro ao processar o pedido.",
       });
     }
   }
@@ -55,13 +61,18 @@ export class AuthController {
         user: safeUser,
       });
     } catch (error) {
-      console.error("Erro no login:", error);
+      if (error instanceof ValidationError) {
+        return res.status(401).json({
+          success: false,
+          message: error.message,
+        });
+      }
 
-      return res.status(401).json({
+      console.error("Erro inesperado no login:", error instanceof Error ? error.message : error);
+
+      return res.status(500).json({
         success: false,
-        message: error instanceof Error
-          ? error.message
-          : "Email ou palavra-passe inválidos.",
+        message: "Ocorreu um erro ao processar o pedido.",
       });
     }
   }
@@ -87,13 +98,18 @@ export class AuthController {
         user: safeUser,
       });
     } catch (error) {
-      console.error("Erro ao obter utilizador:", error);
+      if (error instanceof ValidationError) {
+        return res.status(401).json({
+          success: false,
+          message: error.message,
+        });
+      }
 
-      return res.status(401).json({
+      console.error("Erro inesperado em /me:", error instanceof Error ? error.message : error);
+
+      return res.status(500).json({
         success: false,
-        message: error instanceof Error
-          ? error.message
-          : "Não foi possível obter o utilizador.",
+        message: "Ocorreu um erro ao processar o pedido.",
       });
     }
   }

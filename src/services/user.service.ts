@@ -1,6 +1,16 @@
 import bcrypt from "bcrypt";
 import { UserRepository } from "../repositories/user.repository";
 import { generateToken } from "../lib/jwt";
+import { Prisma } from "../generated/prisma/client";
+import { ValidationError } from "../errors/validation-error";
+
+const NAME_MAX_LENGTH = 200;
+const PASSWORD_MIN_LENGTH = 8;
+const PASSWORD_MAX_BYTES = 72;
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0;
+}
 
 export class UserService {
   private userRepository: UserRepository;
@@ -14,31 +24,88 @@ export class UserService {
     email: string,
     password: string,
   ) {
-    const existingUser = await this.userRepository.findByEmail(email);
+    if (!isNonEmptyString(name)) {
+      throw new ValidationError("O nome é obrigatório.");
+    }
+
+    const trimmedName = name.trim();
+
+    if (trimmedName.length > NAME_MAX_LENGTH) {
+      throw new ValidationError(
+        `O nome não pode ter mais de ${NAME_MAX_LENGTH} caracteres.`,
+      );
+    }
+
+    if (!isNonEmptyString(email)) {
+      throw new ValidationError("O email é obrigatório.");
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+      throw new ValidationError("O formato do email é inválido.");
+    }
+
+    if (typeof password !== "string" || password.length === 0) {
+      throw new ValidationError("A palavra-passe é obrigatória.");
+    }
+
+    if (password.length < PASSWORD_MIN_LENGTH) {
+      throw new ValidationError(
+        `A palavra-passe deve ter pelo menos ${PASSWORD_MIN_LENGTH} caracteres.`,
+      );
+    }
+
+    if (Buffer.byteLength(password, "utf8") > PASSWORD_MAX_BYTES) {
+      throw new ValidationError(
+        "A palavra-passe é demasiado longa.",
+      );
+    }
+
+    const existingUser =
+      await this.userRepository.findByEmail(normalizedEmail);
 
     if (existingUser) {
-      throw new Error("Já existe uma conta com este email.");
+      throw new ValidationError("Já existe uma conta com este email.");
     }
 
     const passwordHash = await bcrypt.hash(password, 12);
 
-    const user = await this.userRepository.create(
-      name,
-      email,
-      passwordHash,
-    );
+    try {
+      const user = await this.userRepository.create(
+        trimmedName,
+        normalizedEmail,
+        passwordHash,
+      );
 
-    return user;
+      return user;
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === "P2002"
+      ) {
+        throw new ValidationError("Já existe uma conta com este email.");
+      }
+
+      throw error;
+    }
   }
 
   async login(
     email: string,
     password: string,
   ) {
-    const user = await this.userRepository.findByEmail(email);
+    // Normalize consistently with register; see compatibility note in C6 audit
+    const normalizedEmail =
+      typeof email === "string"
+        ? email.trim().toLowerCase()
+        : email;
+
+    const user =
+      await this.userRepository.findByEmail(normalizedEmail);
 
     if (!user) {
-      throw new Error("Email ou palavra-passe inválidos.");
+      throw new ValidationError("Email ou palavra-passe inválidos.");
     }
 
     const passwordIsValid = await bcrypt.compare(
@@ -47,7 +114,7 @@ export class UserService {
     );
 
     if (!passwordIsValid) {
-      throw new Error("Email ou palavra-passe inválidos.");
+      throw new ValidationError("Email ou palavra-passe inválidos.");
     }
 
     const token = generateToken(user.id);
@@ -62,7 +129,7 @@ export class UserService {
     const user = await this.userRepository.findById(id);
 
     if (!user) {
-      throw new Error("Utilizador não encontrado.");
+      throw new ValidationError("Utilizador não encontrado.");
     }
 
     return user;

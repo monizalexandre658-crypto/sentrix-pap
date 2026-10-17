@@ -85,7 +85,7 @@ export class VehicleDocumentService {
       );
     }
 
-    const document =
+    const created =
       await this.vehicleDocumentRepository.create(
         type,
         fileName,
@@ -107,7 +107,15 @@ export class VehicleDocumentService {
       );
     }
 
-    return document;
+    return {
+      id: created.id,
+      type: created.type,
+      fileName: created.fileName,
+      originalName: created.originalName,
+      mimeType: created.mimeType,
+      uploadedAt: created.uploadedAt,
+      vehicleId: created.vehicleId,
+    };
   }
 
   async verifyDocument(
@@ -128,7 +136,7 @@ export class VehicleDocumentService {
     }
 
     const document =
-      await this.vehicleDocumentRepository.findByIdAndVehicleId(
+      await this.vehicleDocumentRepository.findByIdAndVehicleIdWithPath(
         documentId,
         vehicleId,
       );
@@ -341,7 +349,7 @@ export class VehicleDocumentService {
     }
 
     const document =
-      await this.vehicleDocumentRepository.findByIdAndVehicleId(
+      await this.vehicleDocumentRepository.findByIdAndVehicleIdWithPath(
         documentId,
         vehicleId,
       );
@@ -352,31 +360,44 @@ export class VehicleDocumentService {
       );
     }
 
-    
+
     try {
-  console.log("Ficheiro que será eliminado:");
-  console.log(document.filePath);
+      console.log("Ficheiro que será eliminado:");
+      console.log(document.filePath);
 
-  await fs.unlink(document.filePath);
+      await fs.unlink(document.filePath);
 
-  console.log("Ficheiro eliminado com sucesso.");
-} catch (error: any) {
-  console.error("Erro ao eliminar ficheiro:");
-  console.error(error);
+      console.log("Ficheiro eliminado com sucesso.");
+    } catch (error: unknown) {
+      console.error("Erro ao eliminar ficheiro:");
+      console.error(error);
 
-  if (error.code !== "ENOENT") {
-    throw new Error(
-      "Não foi possível eliminar o ficheiro do documento.",
-    );
-  }
-}
+      const isEnoent =
+        error instanceof Error &&
+        "code" in error &&
+        typeof (error as { code: unknown }).code === "string" &&
+        (error as { code: string }).code === "ENOENT";
 
-    
+      if (!isEnoent) {
+        throw new Error(
+          "Não foi possível eliminar o ficheiro do documento.",
+        );
+      }
+    }
+
     await this.vehicleDocumentRepository.deleteByIdAndVehicleId(
       documentId,
       vehicleId,
     );
 
-    return document;
+    return {
+      id: document.id,
+      type: document.type,
+      fileName: document.fileName,
+      originalName: document.originalName,
+      mimeType: document.mimeType,
+      uploadedAt: document.uploadedAt,
+      vehicleId: document.vehicleId,
+    };
   }
 }

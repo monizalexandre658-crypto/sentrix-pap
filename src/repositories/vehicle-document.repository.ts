@@ -30,10 +30,40 @@ export class VehicleDocumentRepository {
       orderBy: {
         uploadedAt: "desc",
       },
+      select: {
+        id: true,
+        type: true,
+        fileName: true,
+        originalName: true,
+        mimeType: true,
+        uploadedAt: true,
+        vehicleId: true,
+      },
     });
   }
 
   async findByIdAndVehicleId(
+    documentId: number,
+    vehicleId: number,
+  ) {
+    return prisma.vehicleDocument.findFirst({
+      where: {
+        id: documentId,
+        vehicleId,
+      },
+      select: {
+        id: true,
+        type: true,
+        fileName: true,
+        originalName: true,
+        mimeType: true,
+        uploadedAt: true,
+        vehicleId: true,
+      },
+    });
+  }
+
+  async findByIdAndVehicleIdWithPath(
     documentId: number,
     vehicleId: number,
   ) {
