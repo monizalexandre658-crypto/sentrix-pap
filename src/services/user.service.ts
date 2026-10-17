@@ -95,11 +95,15 @@ export class UserService {
     email: string,
     password: string,
   ) {
-    // Normalize consistently with register; see compatibility note in C6 audit
-    const normalizedEmail =
-      typeof email === "string"
-        ? email.trim().toLowerCase()
-        : email;
+    if (!isNonEmptyString(email)) {
+      throw new ValidationError("Email ou palavra-passe inválidos.");
+    }
+
+    if (typeof password !== "string" || password.length === 0) {
+      throw new ValidationError("Email ou palavra-passe inválidos.");
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
 
     const user =
       await this.userRepository.findByEmail(normalizedEmail);
