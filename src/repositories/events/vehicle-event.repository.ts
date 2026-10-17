@@ -1,26 +1,4 @@
-﻿import "dotenv/config";
-
-import { PrismaClient } from "../../generated/prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
-import { Pool } from "pg";
-
-const databaseUrl = process.env.DATABASE_URL;
-
-if (!databaseUrl) {
-  throw new Error(
-    "DATABASE_URL não está definida no ficheiro .env.",
-  );
-}
-
-const pool = new Pool({
-  connectionString: databaseUrl,
-});
-
-const adapter = new PrismaPg(pool);
-
-const prisma = new PrismaClient({
-  adapter,
-});
+﻿import { prisma } from "../../lib/prisma";
 
 export interface CreateVehicleEventData {
   vehicleId: number;

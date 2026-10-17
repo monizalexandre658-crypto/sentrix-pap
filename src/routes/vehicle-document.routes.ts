@@ -38,6 +38,14 @@ router.get(
 );
 
 
+router.post(
+  "/vehicles/:id/documents/:documentId/verify",
+  authMiddleware,
+  vehicleDocumentController.verify.bind(
+    vehicleDocumentController,
+  ),
+);
+
 router.delete(
   "/vehicles/:id/documents/:documentId",
   authMiddleware,

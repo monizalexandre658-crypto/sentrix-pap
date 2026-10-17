@@ -13,6 +13,7 @@ export class VehicleService {
     plate: string,
     color: string | undefined,
     userId: number,
+    country?: string,
   ) {
     return this.vehicleRepository.create(
       brand,
@@ -20,6 +21,7 @@ export class VehicleService {
       plate,
       color,
       userId,
+      country,
     );
   }
 
@@ -70,6 +72,7 @@ export class VehicleService {
       model?: string;
       plate?: string;
       color?: string;
+      country?: string | null;
     },
   ) {
     const vehicle =

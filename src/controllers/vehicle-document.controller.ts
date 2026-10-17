@@ -229,6 +229,71 @@ export class VehicleDocumentController {
 
 
 
+  async verify(
+    req: Request,
+    res: Response,
+  ) {
+    try {
+      const userId = req.user?.userId;
+
+      if (!userId) {
+        return res.status(401).json({
+          success: false,
+          message: "Utilizador não autenticado.",
+        });
+      }
+
+      const vehicleId = Number(req.params.id);
+      const documentId = Number(req.params.documentId);
+
+      if (!Number.isInteger(vehicleId)) {
+        return res.status(400).json({
+          success: false,
+          message: "ID do veículo inválido.",
+        });
+      }
+
+      if (!Number.isInteger(documentId)) {
+        return res.status(400).json({
+          success: false,
+          message: "ID do documento inválido.",
+        });
+      }
+
+      const result =
+        await this.vehicleDocumentService.verifyDocument(
+          documentId,
+          vehicleId,
+          userId,
+        );
+
+      return res.status(200).json({
+        success: true,
+        ...result,
+      });
+    } catch (error) {
+      console.error("Erro na verificação do documento:", error);
+
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Erro ao verificar o documento.";
+
+      const status =
+        message.includes("não encontrado") ||
+        message.includes("não pertence")
+          ? 404
+          : message.includes("não autenticado")
+          ? 401
+          : 422;
+
+      return res.status(status).json({
+        success: false,
+        message,
+      });
+    }
+  }
+
   async delete(
     req: Request,
     res: Response,

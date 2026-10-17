@@ -20,6 +20,7 @@ export class VehicleController {
         model,
         plate,
         color,
+        country,
       } = req.body;
 
       if (!brand || !model || !plate) {
@@ -37,6 +38,7 @@ export class VehicleController {
           plate,
           color,
           userId,
+          country || undefined,
         );
 
       return res.status(201).json({
@@ -228,6 +230,7 @@ export class VehicleController {
         model,
         plate,
         color,
+        country,
       } = req.body;
 
       const vehicle =
@@ -239,6 +242,7 @@ export class VehicleController {
             model,
             plate,
             color,
+            country: country === "" ? null : country,
           },
         );
 

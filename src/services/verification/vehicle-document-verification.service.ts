@@ -16,8 +16,8 @@ export interface VehicleVerificationResult {
     plate: boolean;
     brand: boolean;
     model: boolean;
-    color: boolean;
-    country: boolean;
+    color: boolean | null;
+    country: boolean | null;
   };
 
   document: ExtractedVehicleData;
@@ -68,20 +68,25 @@ export class VehicleDocumentVerificationService {
       this.normalize(vehicle.model) ===
       this.normalize(documentData.model);
 
+    // Optional fields: null means OCR did not detect the value — skip comparison
     const colorMatch =
-      this.normalize(vehicle.color) ===
-      this.normalize(documentData.color);
+      documentData.color === null
+        ? null
+        : this.normalize(vehicle.color) ===
+          this.normalize(documentData.color);
 
     const countryMatch =
-      this.normalize(vehicle.country) ===
-      this.normalize(documentData.country);
+      documentData.country === null
+        ? null
+        : this.normalize(vehicle.country) ===
+          this.normalize(documentData.country);
 
     const verified =
       plateMatch &&
       brandMatch &&
       modelMatch &&
-      colorMatch &&
-      countryMatch;
+      (colorMatch === null || colorMatch) &&
+      (countryMatch === null || countryMatch);
 
     const mismatches: string[] = [];
 
@@ -97,11 +102,11 @@ export class VehicleDocumentVerificationService {
       mismatches.push("modelo");
     }
 
-    if (!colorMatch) {
+    if (colorMatch === false) {
       mismatches.push("cor");
     }
 
-    if (!countryMatch) {
+    if (countryMatch === false) {
       mismatches.push("país");
     }
 
