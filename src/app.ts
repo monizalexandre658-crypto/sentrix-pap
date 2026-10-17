@@ -1,8 +1,19 @@
+
 import express from "express";
+import cors from "cors";
+
 import authRoutes from "./routes/auth.routes";
 import vehicleRoutes from "./routes/vehicle.routes";
+import vehicleDocumentRoutes from "./routes/vehicle-document.routes";
+import vehicleLocationRoutes from "./routes/vehicle-location.routes";
 
 const app = express();
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  }),
+);
 
 app.use(express.json());
 
@@ -15,4 +26,7 @@ app.get("/health", (_req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/vehicles", vehicleRoutes);
+app.use("/api", vehicleDocumentRoutes);
+app.use("/api/vehicles", vehicleLocationRoutes);
+
 export default app;

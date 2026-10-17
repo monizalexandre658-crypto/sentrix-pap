@@ -7,13 +7,57 @@ datasource db {
   provider = "postgresql"
 }
 
+enum VerificationStatus {
+  PENDING
+  DOCUMENT_SUBMITTED
+  UNDER_REVIEW
+  VERIFIED
+  REJECTED
+}
+
+enum DocumentType {
+  VEHICLE_REGISTRATION
+}
+
+enum VehicleEventType {
+  GNSS_LOST
+  GNSS_RECOVERED
+  MOVEMENT_DETECTED
+  IGNITION_ON
+  IGNITION_OFF
+  GEOFENCE_EXIT
+  GEOFENCE_ENTRY
+  OWNER_AUTHORIZED
+  OWNER_NOT_AUTHORIZED
+  TAMPER_DETECTED
+  POWER_LOST
+  POWER_RECOVERED
+  COMMUNICATION_LOST
+  COMMUNICATION_RECOVERED
+  BACKUP_ACTIVE
+}
+
+enum EventSource {
+  DEVICE
+  SERVER
+  USER
+  SYSTEM
+}
+
+enum TrustState {
+  NORMAL
+  SUSPEITO
+  CRITICO
+  ROUBO_PROVAVEL
+}
+
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  passwordHash  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  passwordHash String
 
   vehicles Vehicle[]
 }
@@ -23,14 +67,22 @@ model Vehicle {
   brand     String
   model     String
   plate     String   @unique
+  country   String?
   color     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  verificationStatus VerificationStatus @default(PENDING)
+  verificationDate   DateTime?
+  verificationNotes  String?
+
   userId Int
   user   User @relation(fields: [userId], references: [id])
 
-  device Device?
+  device    Device?
+  documents VehicleDocument[]
+  events    VehicleEvent[]
+  locations VehicleLocation[]
 }
 
 model Device {
@@ -39,6 +91,66 @@ model Device {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  vehicleId Int      @unique
-  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id])
+  vehicleId Int     @unique
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id])
+}
+
+model VehicleDocument {
+  id Int @id @default(autoincrement())
+
+  type DocumentType
+
+  fileName     String
+  originalName String
+  mimeType     String
+  filePath     String
+
+  uploadedAt DateTime @default(now())
+
+  vehicleId Int
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+}
+
+model VehicleEvent {
+  id Int @id @default(autoincrement())
+
+  vehicleId Int
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  type   VehicleEventType
+  source EventSource
+
+  occurredAt DateTime @default(now())
+
+  latitude  Float?
+  longitude Float?
+  speed     Float?
+
+  previousTrustState TrustState?
+  newTrustState      TrustState?
+
+  metadata Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([vehicleId, occurredAt])
+  @@index([vehicleId, type])
+}
+
+model VehicleLocation {
+  id Int @id @default(autoincrement())
+
+  vehicleId Int
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  latitude  Float
+  longitude Float
+
+  accuracy Float?
+  speed    Float?
+  heading  Float?
+
+  createdAt DateTime @default(now())
+
+  @@index([vehicleId, createdAt])
 }

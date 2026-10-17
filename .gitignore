@@ -34,3 +34,16 @@ Thumbs.db
 .agents/
 .claude/
 .windsurf/
+
+# Documentos privados submetidos por utilizadores
+# Esta pasta contém ficheiros enviados através da aplicação (PDFs, imagens de veículos).
+# São dados pessoais — nunca devem ser versionados nem publicados.
+uploads/
+
+# Modelo de língua portuguesa para OCR (Tesseract)
+# Ficheiro binário de 2.4 MB necessário para o reconhecimento óptico de caracteres em documentos PT.
+# Não é versionado por ser um artefacto regenerável e de grande dimensão.
+# Para reconstruir esta funcionalidade, transfere o modelo de:
+# https://github.com/tesseract-ocr/tessdata/raw/main/por.traineddata
+# e coloca-o na raiz do backend: backend/por.traineddata
+por.traineddata

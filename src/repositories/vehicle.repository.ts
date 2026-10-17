@@ -1,7 +1,6 @@
 import { prisma } from "../lib/prisma";
 
 export class VehicleRepository {
-  // Cria um novo veículo associado ao utilizador autenticado.
   async create(
     brand: string,
     model: string,
@@ -20,7 +19,6 @@ export class VehicleRepository {
     });
   }
 
-  // Obtém todos os veículos pertencentes ao utilizador.
   async findByUserId(userId: number) {
     return prisma.vehicle.findMany({
       where: {
@@ -32,7 +30,6 @@ export class VehicleRepository {
     });
   }
 
-  // Obtém um veículo específico apenas se pertencer ao utilizador.
   async findByIdAndUserId(
     vehicleId: number,
     userId: number,
@@ -45,7 +42,6 @@ export class VehicleRepository {
     });
   }
 
-  // Atualiza um veículo apenas se pertencer ao utilizador.
   async updateByIdAndUserId(
     vehicleId: number,
     userId: number,
@@ -65,7 +61,52 @@ export class VehicleRepository {
     });
   }
 
-  // Elimina um veículo apenas se pertencer ao utilizador.
+  
+  async updateVerification(
+    vehicleId: number,
+    userId: number,
+    data: {
+      verificationStatus:
+        | "PENDING"
+        | "DOCUMENT_SUBMITTED"
+        | "UNDER_REVIEW"
+        | "VERIFIED"
+        | "REJECTED";
+      verificationDate?: Date;
+      verificationNotes?: string;
+    },
+  ) {
+    return prisma.vehicle.updateMany({
+      where: {
+        id: vehicleId,
+        userId,
+      },
+      data,
+    });
+  }
+
+  
+  async findVerificationByIdAndUserId(
+    vehicleId: number,
+    userId: number,
+  ) {
+    return prisma.vehicle.findFirst({
+      where: {
+        id: vehicleId,
+        userId,
+      },
+      select: {
+        id: true,
+        brand: true,
+        model: true,
+        plate: true,
+        verificationStatus: true,
+        verificationDate: true,
+        verificationNotes: true,
+      },
+    });
+  }
+
   async deleteByIdAndUserId(
     vehicleId: number,
     userId: number,

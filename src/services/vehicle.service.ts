@@ -7,7 +7,6 @@ export class VehicleService {
     this.vehicleRepository = new VehicleRepository();
   }
 
-  // Cria um veículo para o utilizador autenticado.
   async createVehicle(
     brand: string,
     model: string,
@@ -15,29 +14,19 @@ export class VehicleService {
     color: string | undefined,
     userId: number,
   ) {
-    const vehicle =
-      await this.vehicleRepository.create(
-        brand,
-        model,
-        plate,
-        color,
-        userId,
-      );
-
-    return vehicle;
+    return this.vehicleRepository.create(
+      brand,
+      model,
+      plate,
+      color,
+      userId,
+    );
   }
 
-  // Obtém todos os veículos pertencentes ao utilizador.
   async getVehiclesByUserId(userId: number) {
-    const vehicles =
-      await this.vehicleRepository.findByUserId(
-        userId,
-      );
-
-    return vehicles;
+    return this.vehicleRepository.findByUserId(userId);
   }
 
-  // Obtém um veículo específico pertencente ao utilizador.
   async getVehicleById(
     vehicleId: number,
     userId: number,
@@ -55,7 +44,24 @@ export class VehicleService {
     return vehicle;
   }
 
-  // Atualiza um veículo pertencente ao utilizador.
+  
+  async getVerificationById(
+    vehicleId: number,
+    userId: number,
+  ) {
+    const vehicle =
+      await this.vehicleRepository.findVerificationByIdAndUserId(
+        vehicleId,
+        userId,
+      );
+
+    if (!vehicle) {
+      throw new Error("Veículo não encontrado.");
+    }
+
+    return vehicle;
+  }
+
   async updateVehicle(
     vehicleId: number,
     userId: number,
@@ -66,63 +72,45 @@ export class VehicleService {
       color?: string;
     },
   ) {
-    // Confirma primeiro que o veículo pertence ao utilizador.
-    const existingVehicle =
+    const vehicle =
       await this.vehicleRepository.findByIdAndUserId(
         vehicleId,
         userId,
       );
 
-    if (!existingVehicle) {
+    if (!vehicle) {
       throw new Error("Veículo não encontrado.");
     }
 
-    // Atualiza o veículo.
     await this.vehicleRepository.updateByIdAndUserId(
       vehicleId,
       userId,
       data,
     );
 
-    // Obtém novamente o veículo já atualizado.
-    const updatedVehicle =
-      await this.vehicleRepository.findByIdAndUserId(
-        vehicleId,
-        userId,
-      );
-
-    if (!updatedVehicle) {
-      throw new Error(
-        "Não foi possível obter o veículo atualizado.",
-      );
-    }
-
-    return updatedVehicle;
+    return this.vehicleRepository.findByIdAndUserId(
+      vehicleId,
+      userId,
+    );
   }
 
-  // Elimina um veículo pertencente ao utilizador.
   async deleteVehicle(
     vehicleId: number,
     userId: number,
   ) {
-    // Confirma primeiro que o veículo pertence ao utilizador.
-    const existingVehicle =
+    const vehicle =
       await this.vehicleRepository.findByIdAndUserId(
         vehicleId,
         userId,
       );
 
-    if (!existingVehicle) {
+    if (!vehicle) {
       throw new Error("Veículo não encontrado.");
     }
 
-    // Elimina o veículo.
     await this.vehicleRepository.deleteByIdAndUserId(
       vehicleId,
       userId,
     );
-
-    // Devolve os dados do veículo eliminado.
-    return existingVehicle;
   }
 }
