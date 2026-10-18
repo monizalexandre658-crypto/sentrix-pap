@@ -33,7 +33,7 @@ export class VehicleDocumentController {
         req.params.id,
       );
 
-      if (!Number.isInteger(vehicleId)) {
+      if (!Number.isInteger(vehicleId) || vehicleId <= 0) {
         return res.status(400).json({
           success: false,
           message:
@@ -121,7 +121,7 @@ export class VehicleDocumentController {
         req.params.id,
       );
 
-      if (!Number.isInteger(vehicleId)) {
+      if (!Number.isInteger(vehicleId) || vehicleId <= 0) {
         return res.status(400).json({
           success: false,
           message:
@@ -182,7 +182,7 @@ export class VehicleDocumentController {
         req.params.documentId,
       );
 
-      if (!Number.isInteger(vehicleId)) {
+      if (!Number.isInteger(vehicleId) || vehicleId <= 0) {
         return res.status(400).json({
           success: false,
           message:
@@ -190,7 +190,7 @@ export class VehicleDocumentController {
         });
       }
 
-      if (!Number.isInteger(documentId)) {
+      if (!Number.isInteger(documentId) || documentId <= 0) {
         return res.status(400).json({
           success: false,
           message:
@@ -246,14 +246,14 @@ export class VehicleDocumentController {
       const vehicleId = Number(req.params.id);
       const documentId = Number(req.params.documentId);
 
-      if (!Number.isInteger(vehicleId)) {
+      if (!Number.isInteger(vehicleId) || vehicleId <= 0) {
         return res.status(400).json({
           success: false,
           message: "ID do veículo inválido.",
         });
       }
 
-      if (!Number.isInteger(documentId)) {
+      if (!Number.isInteger(documentId) || documentId <= 0) {
         return res.status(400).json({
           success: false,
           message: "ID do documento inválido.",
@@ -317,7 +317,7 @@ export class VehicleDocumentController {
         req.params.documentId,
       );
 
-      if (!Number.isInteger(vehicleId)) {
+      if (!Number.isInteger(vehicleId) || vehicleId <= 0) {
         return res.status(400).json({
           success: false,
           message:
@@ -325,7 +325,7 @@ export class VehicleDocumentController {
         });
       }
 
-      if (!Number.isInteger(documentId)) {
+      if (!Number.isInteger(documentId) || documentId <= 0) {
         return res.status(400).json({
           success: false,
           message:
