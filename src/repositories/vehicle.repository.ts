@@ -64,7 +64,7 @@ export class VehicleRepository {
     });
   }
 
-  
+
   async updateVerification(
     vehicleId: number,
     userId: number,
@@ -88,7 +88,7 @@ export class VehicleRepository {
     });
   }
 
-  
+
   async captureAndSetUnderReview(
     vehicleId: number,
     userId: number,

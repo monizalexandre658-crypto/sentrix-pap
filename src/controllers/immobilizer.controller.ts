@@ -15,7 +15,7 @@ export class ImmobilizerController {
   private readonly immobilizerService =
     new ImmobilizerSimulatorService();
 
-  
+
   private async execute(
     req: Request,
     res: Response,
@@ -41,7 +41,7 @@ export class ImmobilizerController {
       });
     }
 
-    
+
     try {
       await this.vehicleService.getVehicleById(
         vehicleId,
@@ -69,7 +69,7 @@ export class ImmobilizerController {
       });
     }
 
-    
+
     try {
       const status = action(vehicleId);
 

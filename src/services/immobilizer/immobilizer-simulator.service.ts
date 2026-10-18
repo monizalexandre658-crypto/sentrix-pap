@@ -27,7 +27,7 @@ export class ImmobilizerSimulatorService {
   private readonly devices = new Map<number, ImmobilizerStatus>();
   private readonly previousStates = new Map<number, OnlineState>();
 
-  
+
   private getDevice(vehicleId: number): ImmobilizerStatus {
     if (!Number.isInteger(vehicleId) || vehicleId <= 0) {
       throw new Error("ID do veículo inválido.");
@@ -52,12 +52,12 @@ export class ImmobilizerSimulatorService {
     return device;
   }
 
-  
+
   getStatus(vehicleId: number): ImmobilizerStatus {
     return { ...this.getDevice(vehicleId) };
   }
 
-  
+
   setVehicleMoving(
     vehicleId: number,
     moving: boolean,
@@ -84,7 +84,7 @@ export class ImmobilizerSimulatorService {
     return { ...device };
   }
 
-  
+
   setOnline(
     vehicleId: number,
     online: boolean,
@@ -134,7 +134,7 @@ export class ImmobilizerSimulatorService {
     return { ...device };
   }
 
-  
+
   requestLock(vehicleId: number): ImmobilizerStatus {
     const device = this.getDevice(vehicleId);
 
@@ -173,7 +173,7 @@ export class ImmobilizerSimulatorService {
     return { ...device };
   }
 
-  
+
   requestUnlock(vehicleId: number): ImmobilizerStatus {
     const device = this.getDevice(vehicleId);
 
@@ -240,7 +240,7 @@ export class ImmobilizerSimulatorService {
     return { ...device };
   }
 
-  
+
   setFault(vehicleId: number): ImmobilizerStatus {
     const device = this.getDevice(vehicleId);
 

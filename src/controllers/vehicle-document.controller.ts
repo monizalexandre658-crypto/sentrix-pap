@@ -10,14 +10,14 @@ export class VehicleDocumentController {
       new VehicleDocumentService();
   }
 
-  
+
 
   async upload(
     req: Request,
     res: Response,
   ) {
     try {
-      
+
       const userId = req.user?.userId;
 
       if (!userId) {
@@ -28,7 +28,7 @@ export class VehicleDocumentController {
         });
       }
 
-      
+
       const vehicleId = Number(
         req.params.id,
       );
@@ -41,7 +41,7 @@ export class VehicleDocumentController {
         });
       }
 
-      
+
       const file = req.file;
 
       if (!file) {
@@ -52,7 +52,7 @@ export class VehicleDocumentController {
         });
       }
 
-      
+
       const type =
         req.body.type ||
         DocumentType.VEHICLE_REGISTRATION;
@@ -157,7 +157,7 @@ export class VehicleDocumentController {
     }
   }
 
-  
+
 
   async getById(
     req: Request,

@@ -46,7 +46,7 @@ export class VehicleService {
     return vehicle;
   }
 
-  
+
   async getVerificationById(
     vehicleId: number,
     userId: number,
