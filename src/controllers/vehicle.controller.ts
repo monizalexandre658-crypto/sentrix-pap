@@ -110,7 +110,7 @@ export class VehicleController {
 
       const vehicleId = Number(req.params.id);
 
-      if (!Number.isInteger(vehicleId)) {
+      if (!Number.isInteger(vehicleId) || vehicleId <= 0) {
         return res.status(400).json({
           success: false,
           message: "ID do veículo inválido.",
@@ -163,7 +163,7 @@ export class VehicleController {
 
       const vehicleId = Number(req.params.id);
 
-      if (!Number.isInteger(vehicleId)) {
+      if (!Number.isInteger(vehicleId) || vehicleId <= 0) {
         return res.status(400).json({
           success: false,
           message: "ID do veículo inválido.",
@@ -216,7 +216,7 @@ export class VehicleController {
 
       const vehicleId = Number(req.params.id);
 
-      if (!Number.isInteger(vehicleId)) {
+      if (!Number.isInteger(vehicleId) || vehicleId <= 0) {
         return res.status(400).json({
           success: false,
           message: "ID do veículo inválido.",
@@ -284,7 +284,7 @@ export class VehicleController {
 
       const vehicleId = Number(req.params.id);
 
-      if (!Number.isInteger(vehicleId)) {
+      if (!Number.isInteger(vehicleId) || vehicleId <= 0) {
         return res.status(400).json({
           success: false,
           message: "ID do veículo inválido.",
